@@ -15,3 +15,18 @@ h2,
 h3 {
     margin: 0;
 }
+
+// 全局主题色
+// css原生设置是:root声明全局变量  这里使用了两个 主要是需要更高的权限 来覆盖全局变量
+:root:root {
+    --adm-color-primary: #fc6627;
+    --adm-color-success: #00b578;
+    --adm-color-warning: #ff8f1f;
+    --adm-color-danger: #ff3141;
+    --adm-color-white: #ffffff;
+    --adm-color-weak: #999999;
+    --adm-color-light: #cccccc;
+    --adm-border-color: #eeeeee;
+    --adm-font-size-main: 13px;
+    --adm-color-text: #333333;
+}

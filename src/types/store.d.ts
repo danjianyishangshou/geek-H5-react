@@ -1,5 +1,5 @@
 //. 主要配置与仓库redux有关的ts类型
-import store from '@/store'
+import store from '../store'
 import { ThunkAction } from 'redux-thunk'
 // 所有状态的类型
 export type RootStore = ReturnType<typeof store.getState>
