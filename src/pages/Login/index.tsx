@@ -2,6 +2,8 @@ import styles from './index.module.scss'
 import { NavBar, Form, Input, List, Button } from 'antd-mobile'
 import { useHistory } from 'react-router'
 import { LoginFrom } from '@/types/data'
+import { useDispatch } from 'react-redux'
+import { doLoginActionCreator } from '@/store/actions/login'
 // 校验规则
 const rules = {
     mobile: [
@@ -17,10 +19,11 @@ const rules = {
 const regulation = ['onChange', 'onBlur']
 // 登录组件
 const Login = () => {
+    const dispatch = useDispatch()
     const history = useHistory()
     // 触发表单提交事件 需要给form 添加onFinish事件 注意给提交按钮添加type='submit'属性
     const onLoginForm = (values: LoginFrom): void => {
-        console.log(values)
+        dispatch(doLoginActionCreator(values))
     }
     return (
         <div className={styles.root}>
