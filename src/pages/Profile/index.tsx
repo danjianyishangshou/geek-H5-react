@@ -1,11 +1,23 @@
 import { Link, useHistory } from 'react-router-dom'
-
 import Icon from '@/components/icon/index'
 import styles from './index.module.scss'
+import { useEffect } from 'react'
+import { getProfileActionCreator } from '@/store/actions/profile'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootStore } from '@/types/store'
+import { ProfileInfo } from '@/types/data'
+
 
 const Profile = () => {
   const history = useHistory()
-
+  const dispatch = useDispatch()
+  // 获取store中的数据
+  const profileInfo = useSelector<RootStore, ProfileInfo>((store) => {
+    return store.profile.profile
+  })
+  useEffect(() => {
+    dispatch(getProfileActionCreator())
+  }, [dispatch])
   return (
     <div className={styles.root}>
       <div className="profile">
@@ -13,11 +25,11 @@ const Profile = () => {
         <div className="user-info">
           <div className="avatar">
             <img
-              src={'http://toutiao.itheima.net/images/user_head.jpg'}
+              src={profileInfo.photo}
               alt=""
             />
           </div>
-          <div className="user-name">黑马先锋</div>
+          <div className="user-name">{profileInfo.name}</div>
           <Link to="/profile/edit">
             个人信息 <Icon name="iconbtn_right" />
           </Link>
@@ -27,26 +39,26 @@ const Profile = () => {
         <div className="read-info">
           <Icon name="iconbtn_readingtime" />
           今日阅读
-          <span>10</span>
+          <span>{profileInfo.follow_count}</span>
           分钟
         </div>
 
         {/* 动态 - 对应的这一行 */}
         <div className="count-list">
           <div className="count-item">
-            <p>1</p>
+            <p>{profileInfo.art_count}</p>
             <p>动态</p>
           </div>
           <div className="count-item">
-            <p>9</p>
+            <p>{profileInfo.follow_count}</p>
             <p>关注</p>
           </div>
           <div className="count-item">
-            <p>99</p>
+            <p>{profileInfo.fans_count}</p>
             <p>粉丝</p>
           </div>
           <div className="count-item">
-            <p>200</p>
+            <p>{profileInfo.like_count}</p>
             <p>被赞</p>
           </div>
         </div>
