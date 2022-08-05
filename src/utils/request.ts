@@ -1,4 +1,6 @@
-import axios from 'axios'
+import { ApiResponse } from '@/types/data'
+import { Toast } from 'antd-mobile'
+import axios, { AxiosError } from 'axios'
 // 创建axios实例
 const http = axios.create({
     baseURL: 'http://geek.itheima.net/v1_0/',
@@ -19,7 +21,19 @@ http.interceptors.response.use(
     (response) => {
         return response
     },
-    (error) => {
+    (error: AxiosError<ApiResponse>) => {
+        if (!error.response) {
+            Toast.show({
+                icon: 'fail',
+                content: '网络异常'
+            })
+        } else {
+            const message = error.response.data.message
+            Toast.show({
+                icon: 'fail',
+                content: message
+            })
+        }
         return Promise.reject(error)
     }
 )

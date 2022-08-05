@@ -1,4 +1,4 @@
-import Icon from '../../components/icon'
+
 const Layout = () => {
     return (
         <div>
