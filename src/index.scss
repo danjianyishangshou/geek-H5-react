@@ -39,3 +39,11 @@ h3 {
     fill: currentColor;
     overflow: hidden;
 }
+
+// 重置样式
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
