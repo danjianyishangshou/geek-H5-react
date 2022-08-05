@@ -1,4 +1,4 @@
-import { RootStore } from "@/types/store"//, RootThunkAction
+import { RootStore, RootThunkAction } from "@/types/store"//
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 /**
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
  * @param getStore 
  * @returns 
  */
-export function useInitialState(sponsorRequest: any) {
+export function useInitialState(sponsorRequest: () => RootThunkAction) {
     // 参数 action: () => RootThunkAction
     const dispatch = useDispatch()
     useEffect(() => {

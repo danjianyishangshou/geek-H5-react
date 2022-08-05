@@ -1,29 +1,32 @@
 import { Link, useHistory } from 'react-router-dom'
 import Icon from '@/components/icon/index'
 import styles from './index.module.scss'
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import { getProfileActionCreator } from '@/store/actions/profile'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootStore } from '@/types/store'
-import { ProfileInfo } from '@/types/data'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { RootStore } from '@/types/store'
+// import { ProfileInfo } from '@/types/data'
+import { useInitialState } from '@/hooks/use-initial-state'
 
 
 const Profile = () => {
   const history = useHistory()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   // 获取store中的数据
-  const profileInfo = useSelector<RootStore, ProfileInfo>((store) => {
-    return store.profile.profile
-  })
-  useEffect(() => {
-    dispatch(getProfileActionCreator())
-  }, [dispatch])
+  // const profileInfo = useSelector<RootStore, ProfileInfo>((store) => {
+  //   return store.profile.profile
+  // })
+  // useEffect(() => {
+  //   dispatch(getProfileActionCreator())
+  // }, [dispatch])
+  const state = useInitialState(getProfileActionCreator)
+  const profileInfo = state.profile.profile
   return (
     <div className={styles.root}>
       <div className="profile">
         {/* 个人信息 */}
         <div className="user-info">
-          <div className="avatar">
+          <div className="avatar" >
             <img
               src={profileInfo.photo}
               alt=""

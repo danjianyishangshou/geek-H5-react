@@ -22,9 +22,6 @@ export const getUserInfoActionCreator = (): RootThunkAction => {
     return async (dispatch) => {
         const res = await http.get<ApiResponse<UserInfo>>('/user/profile')
         const userInfo = res.data.data
-
-        console.log(userInfo)
-
         dispatch({
             type: 'profile/set_userInfo',
             payload: userInfo
