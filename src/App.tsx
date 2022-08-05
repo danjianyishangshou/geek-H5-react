@@ -2,6 +2,7 @@ import './App.scss'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Layout from './pages/Layout'
 import Login from './pages/Login'
+
 function App() {
     return (
         <div className="app">
@@ -20,7 +21,7 @@ function App() {
                 </Route> */}
                 {/* 三 Redirect 官方不推荐 使用有bug */}
                 {/* <Redirect path={'/'} to={'/home'}></Redirect> */}
-                <Route path={'/home'} component={Layout} exact></Route>
+                <Route path={'/home'} component={Layout} ></Route>
                 <Route path={'/login'} component={Login} exact></Route>
             </Switch>
         </div >)
