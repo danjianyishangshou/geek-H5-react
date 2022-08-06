@@ -29,3 +29,17 @@ export const getUserInfoActionCreator = (): RootThunkAction => {
     }
 
 }
+/**
+ * 更新局部信息
+ * @param data 
+ * @returns 
+ */
+// Partial可以将UserInfo中所有的类型转换成可选的
+export const updateUserInfoActionCreator = (data: Partial<UserInfo>): RootThunkAction => {
+    return async (dispatch) => {
+        await http.patch('/user/profile', data)
+        // 获取更新后的用户信息
+        dispatch(getUserInfoActionCreator())
+        
+    }
+}

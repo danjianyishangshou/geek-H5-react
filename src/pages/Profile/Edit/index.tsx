@@ -1,11 +1,12 @@
 import { useInitialState } from '@/hooks/use-initial-state'
-import { getUserInfoActionCreator } from '@/store/actions/profile'
+import { getUserInfoActionCreator, updateUserInfoActionCreator } from '@/store/actions/profile'
 
 // import { UserInfo } from '@/types/data'
 // import { RootStore } from '@/types/store'
 import { Button, List, DatePicker, NavBar, Popup } from 'antd-mobile'
 import classNames from 'classnames'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import EditInput from '../EditInput'
 // import { useEffect } from 'react'
@@ -19,7 +20,7 @@ type PopupStareType = {
 
 // 组件
 const ProfileEdit = () => {
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   // useEffect(() => {
   //   dispatch(getUserInfoActionCreator())
@@ -46,6 +47,7 @@ const ProfileEdit = () => {
       type: value
     })
   }
+
   return (
     <div className={styles.root}>
       <div className="content">
@@ -116,7 +118,7 @@ const ProfileEdit = () => {
         </div>
       </div>
       {/* 昵称和简介的修改表单弹窗 */}
-      <Popup visible={popupState.visible} position="right">
+      <Popup visible={popupState.visible} position="right" destroyOnClose>
         <div style={{ width: '100vw', height: '100vh' }}>
           <EditInput type={popupState.type} onClose={() => {
             setPopupState(
@@ -125,7 +127,19 @@ const ProfileEdit = () => {
                 type: ''
               }
             )
-          }}></EditInput>
+          }}
+            onSubmit={async (value, type) => {
+              // 发送请求更改名字
+              await dispatch(updateUserInfoActionCreator(
+                { [type]: value }
+              ))
+              // 关闭弹窗
+              setPopupState({
+                visible: false,
+                type: ''
+              })
+            }}
+          ></EditInput>
         </div>
       </Popup >
     </div >
