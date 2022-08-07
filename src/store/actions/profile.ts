@@ -1,5 +1,6 @@
 import { ApiResponse, ProfileInfo, UserInfo } from "@/types/data"
 import { RootAction, RootThunkAction } from "@/types/store"
+import { removeTokenInfo } from "@/utils/localToken"
 import http from "@/utils/request"
 
 /**
@@ -40,6 +41,44 @@ export const updateUserInfoActionCreator = (data: Partial<UserInfo>): RootThunkA
         await http.patch('/user/profile', data)
         // 获取更新后的用户信息
         dispatch(getUserInfoActionCreator())
-        
+
+    }
+}
+/**
+ * 更新头像
+ * @param data 
+ * @returns 
+ */
+export const updateUserPhotoActionCreator = (data: FormData): RootThunkAction => {
+    return async (dispatch) => {
+        await http.patch('/user/photo', data)
+        dispatch(getUserInfoActionCreator())
+    }
+}
+
+/**
+ * 
+ * 退出登录 
+ * 
+ */
+export const logoutInfo = (): RootThunkAction => {
+    return async (dispatch) => {
+        // 1,清除本地token
+        removeTokenInfo()
+        //2 清除redux数据
+        dispatch({
+            type: 'login/set_tokenInfo',
+            payload: {}
+        } as RootAction)
+        // 3,清除个人信息 profile
+        dispatch({
+            type: 'profile/set_profile',
+            payload: {}
+        } as RootAction)
+        // 清除userInfo
+        dispatch({
+            type: 'profile/set_userInfo',
+            payload: {}
+        } as RootAction)
     }
 }

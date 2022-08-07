@@ -25,6 +25,16 @@ const EditInput = ({ type, onClose, onSubmit }: EditInputType) => {
   useEffect(() => {
     inputRef.current?.focus()
     textAreaRef.current?.focus()
+    // 获取原生的DOM 使用setSelectionRange方法选中元素
+    const _textarea = document.querySelector('.adm-text-area-element') as HTMLTextAreaElement
+
+    if (_textarea) {
+      // const end = _textarea.value.length
+      const end = _textarea.textLength
+      // setSelectionRange(end, end)选中的文字 第一个参数 开始的位置 第二个参数 结束的位置 
+      // 如果要实现光标定位就要实现起始位置相同
+      _textarea.setSelectionRange(end, end)
+    }
   }, [])
   return (
     <div className={styles.root}>
@@ -47,7 +57,7 @@ const EditInput = ({ type, onClose, onSubmit }: EditInputType) => {
             <Input placeholder="请输入" value={value} maxLength={11} onChange={onInputChange} ref={inputRef} />
           </div>) :
           (<TextArea
-            className="textarea"
+            className="textarea _textarea"
             placeholder="请输入简介"
             showCount
             maxLength={99}
