@@ -1,10 +1,19 @@
+import { history } from "@/router";
+import store from "@/store";
 import { ApiResponse } from "@/types/data";
+import { RootAction } from "@/types/store";
 import { Toast } from "antd-mobile";
 import axios, { AxiosError } from "axios";
-import { getTokenInfo } from "./localToken";
+import {
+  getTokenInfo,
+  isTokenInfo,
+  removeTokenInfo,
+  setTokenInfo,
+} from "./localToken";
+const baseURL = "http://geek.itheima.net/v1_0/";
 // 创建axios实例
 const http = axios.create({
-  baseURL: "http://geek.itheima.net/v1_0/",
+  baseURL,
   timeout: 10000,
 });
 
@@ -26,21 +35,63 @@ http.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error: AxiosError<ApiResponse>) => {
-    // console.log(error.message)
-    // if(error.message==='Request failed with status code 401'&&error.code==='ERR_BAD_REQUEST'){
-    //     console.log(1566666);
-    // }
-    if (
-      error.response?.status === 401 &&
-      error.response.data.message === "token超时或者未传token"
-    ) {
-      let refresh_token = getTokenInfo().refresh_token;
-      let data =
-        (error.config.headers!.Authorization = `Bearer ${refresh_token}`);
-      let res = http.put("/authorizations", data);
-      console.log(res);
+  async (error: AxiosError<ApiResponse>) => {
+    // 本地有token的情况下在进行token的刷新判断
+    if (isTokenInfo()) {
+      if (
+        error.response?.status === 401 &&
+        error.response.data.message === "token超时或者未传token"
+      ) {
+        let refresh_token = getTokenInfo().refresh_token;
+        //   axios第三个参数可以配置响应头
+        //   这里要使用axios发起请求防止出现请求拦截器混乱
+        try {
+          let res = await axios.put(
+            baseURL + "authorizations",
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${refresh_token}`,
+              },
+            }
+          );
+          //   获取到的新的token
+          let newToken = res.data.data.token;
+          //  新的token存储在本地
+          setTokenInfo({
+            ...getTokenInfo(),
+            token: newToken,
+          });
+          //   新的token存在仓库中
+          store.dispatch({
+            type: "login/set_tokenInfo",
+            payload: {
+              ...getTokenInfo(),
+              token: newToken,
+            },
+          } as RootAction);
+          //   重新发起请求的新的token  之前的请求信息
+          const config = error.response.config;
+          return http(config);
+        } catch {
+          // "refresh_token失效" 回到首页 重新登录
+          history.replace({
+            pathname: "/login",
+            state: {
+              redirectUrl: history.location.pathname,
+            },
+          });
+          //   清除token
+          removeTokenInfo();
+          store.dispatch({
+            type: "login/set_tokenInfo",
+            payload: {},
+          } as RootAction);
+        }
+      }
     }
+
+    // 处理网络异常的问题
     if (!error.response) {
       Toast.show({
         icon: "fail",

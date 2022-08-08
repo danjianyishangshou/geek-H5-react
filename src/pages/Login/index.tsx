@@ -64,7 +64,7 @@ const Login = () => {
       // 对话框关闭后的回调函数
       afterClose: () => {
         // 重定向路径 在location中的state中获取路径信息
-        const url = location.state.redirectUrl;
+        const url = location.state?.redirectUrl;
         if (url) {
           history.replace(url);
         } else {
