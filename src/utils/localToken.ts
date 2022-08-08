@@ -22,8 +22,8 @@ export const removeTokenInfo = () => removeLocalStore(TOKEN_KEY)
  * 判断有没有token
  * @returns 
  */
-export const isTokenInfo = () => !!getTokenInfo().tokenInfo
-
+export const isTokenInfo = () => getTokenInfo().token
+// .tokenInfo
 // export const isTokenInfo = () => {
 //     // if (JSON.stringify(getTokenInfo() === '{}')) {
 //     //     return false
