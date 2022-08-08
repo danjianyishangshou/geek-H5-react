@@ -13,7 +13,7 @@ import EditList from '../EditList'
 // import { useEffect } from 'react'
 // import { useDispatch, useSelector } from 'react-redux'
 import styles from './index.module.scss'
-import { removeTokenInfo } from '@/utils/localToken'
+// import { removeTokenInfo } from '@/utils/localToken'
 const Item = List.Item
 // 昵称和个人信息
 type PopupStareType = {

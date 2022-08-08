@@ -3,6 +3,7 @@ import { Route, Redirect, Switch } from 'react-router-dom'
 import Layout from '@/pages/Layout'
 import Login from '@/pages/Login'
 import ProfileEdit from '@/pages/Profile/Edit'
+import AuthRoute from './components/AuthRoute'
 function App() {
     return (
         <div className="app">
@@ -24,7 +25,8 @@ function App() {
                 <Route path={'/home'} component={Layout} ></Route>
                 <Route path={'/login'} component={Login} ></Route>
                 {/* 个人详情页路由 */}
-                <Route path={'/profile/edit'} component={ProfileEdit} exact></Route>
+                {/* <Route path={'/profile/edit'} component={ProfileEdit} exact></Route> */}
+                <AuthRoute path={'/profile/edit'} component={ProfileEdit} />
             </Switch>
         </div >)
 }

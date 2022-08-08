@@ -7,6 +7,7 @@ import Question from '../Question/index'
 import Profile from '@/pages/Profile'
 import Video from '@/pages/Video'
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
+import AuthRoute from '@/components/AuthRoute'
 const Layout = () => {
     // 标签页数据
     const tabs = [
@@ -40,7 +41,9 @@ const Layout = () => {
                 <Route path="/home" exact component={Home} />
                 <Route path="/home/question" component={Question} />
                 <Route path="/home/video" component={Video} />
-                <Route path="/home/profile" component={Profile} />
+                {/* <Route path="/home/profile" component={Profile} /> */}
+                {/* 权限控制 */}
+                <AuthRoute path="/home/profile" component={Profile}/>
             </Switch>
         </div>
     )
