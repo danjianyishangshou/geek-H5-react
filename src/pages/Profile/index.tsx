@@ -1,13 +1,12 @@
-import { Link, useHistory } from 'react-router-dom'
-import Icon from '@/components/icon/index'
-import styles from './index.module.scss'
+import { Link, useHistory } from "react-router-dom"
+import Icon from "@/components/icon/index"
+import styles from "./index.module.scss"
 // import { useEffect } from 'react'
-import { getProfileActionCreator } from '@/store/actions/profile'
+import { getProfileActionCreator } from "@/store/actions/profile"
 // import { useDispatch, useSelector } from 'react-redux'
 // import { RootStore } from '@/types/store'
 // import { ProfileInfo } from '@/types/data'
-import { useInitialState } from '@/hooks/use-initial-state'
-
+import { useInitialState } from "@/hooks/use-initial-state"
 
 const Profile = () => {
   const history = useHistory()
@@ -26,11 +25,8 @@ const Profile = () => {
       <div className="profile">
         {/* 个人信息 */}
         <div className="user-info">
-          <div className="avatar" >
-            <img
-              src={profileInfo.photo}
-              alt=""
-            />
+          <div className="avatar">
+            <img src={profileInfo.photo} alt="" />
           </div>
           <div className="user-name">{profileInfo.name}</div>
           <Link to="/profile/edit">
@@ -95,7 +91,7 @@ const Profile = () => {
             <Icon name="iconbtn_feedback" />
             <div>用户反馈</div>
           </div>
-          <div className="service-item" onClick={() => history.push('/chat')}>
+          <div className="service-item" onClick={() => history.push("/chat")}>
             <Icon name="iconbtn_xiaozhitongxue" />
             <div>小智同学</div>
           </div>

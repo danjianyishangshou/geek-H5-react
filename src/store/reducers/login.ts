@@ -1,26 +1,24 @@
 import { TokenInfo } from "@/types/data"
-import { RootAction } from '@/types/store'
+import { RootAction } from "@/types/store"
 import { getTokenInfo } from "@/utils/localToken"
 export type LoginStore = {
-    tokenInfo: TokenInfo
+  tokenInfo: TokenInfo
 }
 
 const initState = {
-    tokenInfo: getTokenInfo() || {
-        token: '',
-        refresh_token: ''
-    }
+  tokenInfo: getTokenInfo() || {
+    token: "",
+    refresh_token: "",
+  },
 }
-const LoginReducer = (
-    state: LoginStore = initState,
-    action: RootAction
+export const LoginReducer = (
+  state: LoginStore = initState,
+  action: RootAction
 ): LoginStore => {
-    if (action.type === 'login/set_tokenInfo') {
-        return {
-            tokenInfo: action.payload
-        }
+  if (action.type === "login/set_tokenInfo") {
+    return {
+      tokenInfo: action.payload,
     }
-    return state
+  }
+  return state
 }
-
-export default LoginReducer

@@ -1,4 +1,4 @@
-import Icon from "@/components/icon"
+import Icon from "@/components/icon/index"
 import { useInitialState } from "@/hooks/use-initial-state"
 import { getProfileActionCreator } from "@/store/actions/profile"
 import { Message, ProfileInfo } from "@/types/data"

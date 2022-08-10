@@ -52,3 +52,9 @@ type Message = {
   type: "robot" | "user"
   text: string
 }
+
+// 频道类型
+type Channel = {
+  id: number
+  name: string
+}

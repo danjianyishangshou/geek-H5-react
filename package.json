@@ -15,6 +15,7 @@
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "dayjs": "^1.11.4",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^7.0.2",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.5",
+    "@types/lodash": "^4.14.182",
     "postcss-px-to-viewport": "^1.1.1",
     "sass": "^1.54.0"
   }
