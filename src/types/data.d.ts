@@ -58,3 +58,24 @@ type Channel = {
   id: number
   name: string
 }
+// 文章列表项分页信息
+export type ArticleItemDataPage = {
+  pre_timestamp: string
+  results: ArticleItemData[]
+}
+// 文章的类型
+export type ArticleItemData = {
+  art_id: string
+  title: string
+  aut_id: string
+  comm_count: number
+  pubdate: string //发布日期
+  aut_name: string
+  is_top: number
+  cover: ArticleItemCover
+}
+// 文章图片种类的类型
+export type ArticleItemCover = {
+  type: 0 | 1 | 3
+  images: string[]
+}

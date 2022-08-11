@@ -1,19 +1,20 @@
 import classnames from "classnames"
-
 import Icon from "@/components/icon/index"
-
 import styles from "./index.module.scss"
+import { ArticleItemData } from "@/types/data"
+import dayjs from "dayjs"
 
-type Props = {
+type ArticleItemProps = {
   /**
    * 0 表示无图
    * 1 表示单图
    * 3 表示三图
    */
   type?: 0 | 1 | 3
+  article: ArticleItemData
 }
 
-const ArticleItem = ({ type = 0 }: Props) => {
+const ArticleItem = ({ type = 0, article }: ArticleItemProps) => {
   return (
     <div className={styles.root}>
       <div
@@ -23,22 +24,26 @@ const ArticleItem = ({ type = 0 }: Props) => {
           type === 0 && "none-mt"
         )}
       >
-        <h3>Vue响应式----数据响应式原理</h3>
+        <h3>{article.title}</h3>
+        {/* 有图片 */}
         {type !== 0 && (
           <div className="article-imgs">
-            <div className="article-img-wrapper">
-              <img
-                src="http://geek.itheima.net/resources/images/63.jpg"
-                alt=""
-              />
-            </div>
+            {article.cover.images.map((img, index) => {
+              return (
+                <div className="article-img-wrapper" key={index}>
+                  <img src={img} alt="" />
+                </div>
+              )
+            })}
           </div>
         )}
       </div>
+      {/* 没有图片 */}
       <div className={classnames("article-info", type === 0 && "none-mt")}>
-        <span>黑马先锋</span>
-        <span>99 评论</span>
-        <span>2 天前</span>
+        <span>{article.aut_name}</span>
+        <span>{article.comm_count} 评论</span>
+
+        <span> {dayjs(article.pubdate).fromNow()}</span>
         <span className="close">
           <Icon name="iconbtn_essay_close" />
         </span>

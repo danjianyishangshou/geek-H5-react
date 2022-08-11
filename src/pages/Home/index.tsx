@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from "react-redux"
 import styles from "./index.module.scss"
 import Channels from "./Channels/index"
 import { useInitialState } from "@/hooks/use-initial-state"
+import { getArticlesData } from "@/store/actions/article"
+
+import ArticleList from "./ArticleList"
+
 const Tab = Tabs.Tab
 const Home = () => {
   const dispatch = useDispatch()
@@ -30,6 +34,11 @@ const Home = () => {
   const actionId = useSelector<RootStore, number>((state) => {
     return state.channels.selectedActive
   })
+  //进入页面第一次触发获取文章列表
+  useEffect(() => {
+    if (actionId === undefined) return
+    dispatch(getArticlesData(actionId, Date.now().toString()))
+  }, [dispatch, actionId])
   useEffect(() => {
     const defaultActive = channels[0]?.id
     dispatch({
@@ -54,7 +63,7 @@ const Home = () => {
         {channels.map((channel: Channel) => {
           return (
             <Tab title={channel.name} key={"" + channel.id}>
-              {channel.name}
+              <ArticleList channelId={channel.id} />
             </Tab>
           )
         })}

@@ -1,7 +1,13 @@
 //. 主要配置与仓库redux有关的ts类型
 import store from "../store"
 import { ThunkAction } from "redux-thunk"
-import { Channel, Profile, UserInfo } from "@/types/data"
+import {
+  ArticleItemData,
+  ArticleItemDataPage,
+  Channel,
+  Profile,
+  UserInfo,
+} from "@/types/data"
 // 所有状态的类型
 export type RootStore = ReturnType<typeof store.getState>
 
@@ -32,6 +38,13 @@ export interface ChannelsSelectedAction {
   type: "channels/set_selectedActive"
   payload: number
 }
+export interface ChannelArticle {
+  type: "article/set_channel_article"
+  payload: {
+    channelId: number
+    data: ArticleItemDataPage
+  }
+}
 // 汇总与action相关的联合类型
 export type RootAction =
   | LoginAction
@@ -41,6 +54,7 @@ export type RootAction =
   | ChannelsAction
   | ChannelsAllAction
   | ChannelsSelectedAction
+  | ChannelArticle
 
 // 所有thunkAction的类型
 export type RootThunkAction = ThunkAction<void, RootStore, unknown, RootAction>

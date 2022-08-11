@@ -2,7 +2,6 @@ import { NavBar, InfiniteScroll } from "antd-mobile"
 import { useHistory } from "react-router-dom"
 import classNames from "classnames"
 import styles from "./index.module.scss"
-
 import Icon from "@/components/icon/index"
 import CommentItem from "./components/CommentItem"
 import CommentFooter from "./components/CommentFooter"

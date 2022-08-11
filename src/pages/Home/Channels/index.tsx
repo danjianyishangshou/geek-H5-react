@@ -38,6 +38,7 @@ const Channels = ({
   const actionId = useSelector<RootStore, number>((state) => {
     return state.channels.selectedActive
   })
+
   useEffect(() => {
     // const newList = allChannels.filter((item) => {
     //   const channel = channels.find((sub) => sub.id === item.id)
