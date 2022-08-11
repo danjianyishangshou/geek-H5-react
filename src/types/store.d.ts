@@ -28,6 +28,10 @@ export interface ChannelsAllAction {
   type: "channels/set_all_channels"
   payload: Channel[]
 }
+export interface ChannelsSelectedAction {
+  type: "channels/set_selectedActive"
+  payload: number
+}
 // 汇总与action相关的联合类型
 export type RootAction =
   | LoginAction
@@ -36,6 +40,7 @@ export type RootAction =
   | ProfileUserAction
   | ChannelsAction
   | ChannelsAllAction
+  | ChannelsSelectedAction
 
 // 所有thunkAction的类型
 export type RootThunkAction = ThunkAction<void, RootStore, unknown, RootAction>

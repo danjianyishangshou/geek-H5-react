@@ -1,6 +1,11 @@
 .root {
   height: 100%;
-
+  :global{
+    .adm-tabs-header {
+      padding-right: 80px!important;
+      padding-bottom: 2px!important;
+  }
+}
   :global {
     .tabs {
       height: 100%;
@@ -13,6 +18,7 @@
         height: 44px;
         width: calc(100vw - 86px);
         background-color: #fff;
+        
       }
 
       .adm-tabs-tab {
@@ -35,7 +41,7 @@
         padding: 0;
       }
     }
-
+ 
     .tabs-opration {
       position: fixed;
       top: 0;

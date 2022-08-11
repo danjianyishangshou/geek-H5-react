@@ -1,12 +1,17 @@
 import { Channel } from "@/types/data"
 import { RootAction } from "@/types/store"
 export type ChannelsState = {
+  // 用户频道
   channels: Channel[]
+  // 全部频道
   allChannels: Channel[]
+  // 选中状态
+  selectedActive: number
 }
 const initState: ChannelsState = {
   channels: [],
   allChannels: [],
+  selectedActive: 0,
 }
 
 export const channelsReducer = (
@@ -23,6 +28,12 @@ export const channelsReducer = (
     return {
       ...state,
       allChannels: action.payload,
+    }
+  }
+  if (action.type === "channels/set_selectedActive") {
+    return {
+      ...state,
+      selectedActive: action.payload,
     }
   }
   return state

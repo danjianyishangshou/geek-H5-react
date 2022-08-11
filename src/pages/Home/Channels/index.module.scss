@@ -1,11 +1,12 @@
 .root {
+  
   width: 375px;
   :global {
     .channel-header {
       position: relative;
       height: 44px;
       padding: 13px 0;
-
+      
       .icon {
         position: absolute;
         right: 16px;
@@ -63,7 +64,7 @@
           font-size: 12px;
         }
       }
-
+  
       .channel-list {
         &-item {
           position: relative;
