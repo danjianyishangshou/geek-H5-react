@@ -33,3 +33,27 @@ export const getArticlesData = (
     } as RootAction)
   }
 }
+
+/**
+ * 获取下拉刷新文章列表
+ * @param channelId
+ * @returns
+ */
+export const getNewArticlesData = (channelId: number): RootThunkAction => {
+  return async (dispatch) => {
+    const res = await http.get<ApiResponse<ArticleItemDataPage>>("/articles", {
+      params: {
+        channel_id: channelId,
+        timestamp: "" + Date.now(),
+      },
+    })
+
+    dispatch({
+      type: "article/set_channel_article",
+      payload: {
+        channelId,
+        data: res.data.data,
+      },
+    } as RootAction)
+  }
+}
