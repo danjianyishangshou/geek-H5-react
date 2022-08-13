@@ -11,10 +11,12 @@ import { useInitialState } from "@/hooks/use-initial-state"
 import { getArticlesData } from "@/store/actions/article"
 
 import ArticleList from "./ArticleList"
+import { useHistory } from "react-router-dom"
 
 const Tab = Tabs.Tab
 const Home = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
   // // 获取用户列表
   // useEffect(() => {
   //   dispatch(getUserChannel())
@@ -92,7 +94,8 @@ const Home = () => {
         ></Channels>
       </Popup>
       <div className="tabs-opration">
-        <Icon name="iconbtn_search" />
+        {/* 搜索按钮 */}
+        <Icon name="iconbtn_search" onClick={() => history.push("/search")} />
         <Icon
           name="iconbtn_channel"
           onClick={() => {

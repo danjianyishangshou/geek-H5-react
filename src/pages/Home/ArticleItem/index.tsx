@@ -3,7 +3,7 @@ import Icon from "@/components/icon/index"
 import styles from "./index.module.scss"
 import { ArticleItemData } from "@/types/data"
 import dayjs from "dayjs"
-
+import Image from "../Img/index"
 type ArticleItemProps = {
   /**
    * 0 表示无图
@@ -12,11 +12,12 @@ type ArticleItemProps = {
    */
   type?: 0 | 1 | 3
   article: ArticleItemData
+  onClick?: () => void
 }
 
-const ArticleItem = ({ type = 0, article }: ArticleItemProps) => {
+const ArticleItem = ({ type = 0, article, onClick }: ArticleItemProps) => {
   return (
-    <div className={styles.root}>
+    <div className={styles.root} onClick={onClick}>
       <div
         className={classnames(
           "article-content",
@@ -31,7 +32,9 @@ const ArticleItem = ({ type = 0, article }: ArticleItemProps) => {
             {article.cover.images.map((img, index) => {
               return (
                 <div className="article-img-wrapper" key={index}>
-                  <img src={img} alt="" />
+                  {/* 实现路由懒加载 */}
+                  {/* <img src={img} alt="" /> */}
+                  <Image src={img}></Image>
                 </div>
               )
             })}

@@ -3,6 +3,7 @@ import { ArticleItemDataPage } from "@/types/data"
 import { RootStore } from "@/types/store"
 import { InfiniteScroll, PullToRefresh } from "antd-mobile"
 import { useDispatch, useSelector } from "react-redux"
+import { useHistory } from "react-router-dom"
 import ArticleItem from "../ArticleItem"
 
 import styles from "./index.module.scss"
@@ -15,6 +16,7 @@ const ArticleList = (props: PropsType) => {
   const articlesList = useSelector<RootStore, ArticleItemDataPage>((state) => {
     return state.articles.channelArticles[id]
   })
+  const history = useHistory()
   return (
     <div className={styles.root}>
       {/* 文章列表中的每一项 */}
@@ -31,6 +33,9 @@ const ArticleList = (props: PropsType) => {
                 key={index}
                 article={article}
                 type={article.cover.type}
+                onClick={() => {
+                  history.push(`/article/${article.art_id}`)
+                }}
               />
             )
           })}

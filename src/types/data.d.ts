@@ -79,3 +79,27 @@ export type ArticleItemCover = {
   type: 0 | 1 | 3
   images: string[]
 }
+
+// 文章类型
+
+interface ArticleDataPage {
+  page: number
+  per_page: number
+  results: ArticleDetail[]
+  total_count: number
+}
+
+type ArticleDetail = {
+  art_id: string
+  title: string
+  aut_id: string
+  aut_name: string
+  comm_count: number
+  pubdate: string
+  cover: {
+    type: number
+    images?: string[]
+  }
+  like_count: number
+  collect_count: number
+} & ArticleItemData

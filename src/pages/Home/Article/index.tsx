@@ -47,12 +47,7 @@ const Article = () => {
           <div className="comment-list">
             <CommentItem />
 
-            <InfiniteScroll
-              hasMore={false}
-              loadMore={async () => {
-                console.log(1)
-              }}
-            />
+            <InfiniteScroll hasMore={false} loadMore={async () => {}} />
           </div>
         </div>
       </div>

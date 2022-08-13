@@ -2,12 +2,14 @@
 import store from "../store"
 import { ThunkAction } from "redux-thunk"
 import {
+  ArticleDataPage,
   ArticleItemData,
   ArticleItemDataPage,
   Channel,
   Profile,
   UserInfo,
 } from "@/types/data"
+
 // 所有状态的类型
 export type RootStore = ReturnType<typeof store.getState>
 
@@ -45,6 +47,21 @@ export interface ChannelArticle {
     data: ArticleItemDataPage
   }
 }
+
+export interface SearchSuggestionArticle {
+  type: "search/set_suggestion_article"
+  payload: string[]
+}
+
+export interface SearchKeyWordsArticle {
+  type: "search/set_keyWords_article"
+  payload: string[]
+}
+
+export interface SearchPageArticle {
+  type: "search/set_Page_article"
+  payload: ArticleDataPage
+}
 // 汇总与action相关的联合类型
 export type RootAction =
   | LoginAction
@@ -55,6 +72,9 @@ export type RootAction =
   | ChannelsAllAction
   | ChannelsSelectedAction
   | ChannelArticle
+  | SearchSuggestionArticle
+  | SearchKeyWordsArticle
+  | SearchPageArticle
 
 // 所有thunkAction的类型
 export type RootThunkAction = ThunkAction<void, RootStore, unknown, RootAction>
