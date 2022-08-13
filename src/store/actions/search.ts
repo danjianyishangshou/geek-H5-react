@@ -2,7 +2,7 @@ import { ApiResponse, ArticleDataPage } from "@/types/data"
 import {
   RootAction,
   RootThunkAction,
-  SearchKeyWordsArticle,
+  SearchKeyWordsAction,
 } from "@/types/store"
 import { setKeyWords } from "@/utils/localKeyWords"
 import http from "@/utils/request"
@@ -40,7 +40,7 @@ export const setSearchKeyWords = (keyWord: string): RootThunkAction => {
     dispatch({
       type: "search/set_keyWords_article",
       payload: newKeyWords,
-    } as SearchKeyWordsArticle)
+    } as SearchKeyWordsAction)
 
     setKeyWords(newKeyWords)
   }

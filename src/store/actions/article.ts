@@ -1,4 +1,8 @@
-import { ApiResponse, ArticleItemDataPage } from "@/types/data"
+import {
+  ApiResponse,
+  ArticleDetailInfo,
+  ArticleItemDataPage,
+} from "@/types/data"
 import { RootAction, RootThunkAction } from "@/types/store"
 import http from "@/utils/request"
 /**
@@ -54,6 +58,18 @@ export const getNewArticlesData = (channelId: number): RootThunkAction => {
         channelId,
         data: res.data.data,
       },
+    } as RootAction)
+  }
+}
+
+export function getArticleDetail(id: string): RootThunkAction {
+  return async (dispatch) => {
+    const res = await http.get<ApiResponse<ArticleDetailInfo>>(
+      `/articles/${id}`
+    )
+    dispatch({
+      type: "article/set_article_action",
+      payload: res.data.data,
     } as RootAction)
   }
 }

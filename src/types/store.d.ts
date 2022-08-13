@@ -8,6 +8,7 @@ import {
   Channel,
   Profile,
   UserInfo,
+  ArticleDetailInfo,
 } from "@/types/data"
 
 // 所有状态的类型
@@ -40,7 +41,7 @@ export interface ChannelsSelectedAction {
   type: "channels/set_selectedActive"
   payload: number
 }
-export interface ChannelArticle {
+export interface ChannelAction {
   type: "article/set_channel_article"
   payload: {
     channelId: number
@@ -48,19 +49,24 @@ export interface ChannelArticle {
   }
 }
 
-export interface SearchSuggestionArticle {
+export interface SearchSuggestionAction {
   type: "search/set_suggestion_article"
   payload: string[]
 }
 
-export interface SearchKeyWordsArticle {
+export interface SearchKeyWordsAction {
   type: "search/set_keyWords_article"
   payload: string[]
 }
 
-export interface SearchPageArticle {
+export interface SearchPageAction {
   type: "search/set_Page_article"
   payload: ArticleDataPage
+}
+
+export interface ArticleInfoAction {
+  type: "article/set_article_action"
+  payload: ArticleDetailInfo
 }
 // 汇总与action相关的联合类型
 export type RootAction =
@@ -71,10 +77,11 @@ export type RootAction =
   | ChannelsAction
   | ChannelsAllAction
   | ChannelsSelectedAction
-  | ChannelArticle
-  | SearchSuggestionArticle
-  | SearchKeyWordsArticle
-  | SearchPageArticle
+  | ChannelAction
+  | SearchSuggestionAction
+  | SearchKeyWordsAction
+  | SearchPageAction
+  | ArticleInfoAction
 
 // 所有thunkAction的类型
 export type RootThunkAction = ThunkAction<void, RootStore, unknown, RootAction>
