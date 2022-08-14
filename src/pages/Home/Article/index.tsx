@@ -1,4 +1,4 @@
-import { NavBar, InfiniteScroll } from "antd-mobile"
+import { NavBar, InfiniteScroll, Popup } from "antd-mobile"
 import { useHistory, useParams } from "react-router-dom"
 import classNames from "classnames"
 import styles from "./index.module.scss"
@@ -9,25 +9,37 @@ import { useEffect, useRef, useState } from "react"
 import { followUser, getArticleDetail } from "@/store/actions/article"
 import { useDispatch, useSelector } from "react-redux"
 import { RootAction, RootStore } from "@/types/store"
-import { ArticleDetailInfo, CommentRes } from "@/types/data"
+import { ArticleDetailInfo, Comment, CommentRes } from "@/types/data"
 // 导入处理防止xss攻击的功能包
 import DOMpurify from "dompurify"
 //代码高亮包
 import highlight from "highlight.js"
 // 引入样式 可以选择样式
 import "highlight.js/styles/vs2015.css"
-import { getCommentPage } from "@/store/actions/comment"
+import { addComment, getCommentPage } from "@/store/actions/comment"
 import NoComment from "./components/NoComment"
+import CommentInput from "./components/CommentInput"
+import CommentReply from "./components/CommentReply"
 const Article = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const params = useParams<{ id: string }>()
   const id = params.id
-
+  const [isTopInfoShow, setTopInfoShow] = useState(false)
+  const [showInput, setShowInput] = useState<boolean>(false)
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
+  const authorRef = useRef<HTMLDivElement | null>(null)
+  const [showReply, setShowReply] = useState<boolean>(false)
+  const [currentReplyComment, setCurrentReplyComment] = useState<Comment>(
+    {} as Comment
+  )
   useEffect(() => {
+    dispatch(getCommentPage(id, ""))
     dispatch(getArticleDetail(id))
-  }, [dispatch, id])
-
+  }, [dispatch, id, showInput])
+  // useEffect(() => {
+  //   dispatch(getCommentPage(id, ""))
+  // }, [showInput, id])
   const articleInfo = useSelector<RootStore, ArticleDetailInfo>((state) => {
     return state.articles.articleInfo
   })
@@ -40,9 +52,7 @@ const Article = () => {
       highlight.highlightElement(el as HTMLElement)
     })
   }, [articleInfo])
-  const [isTopInfoShow, setTopInfoShow] = useState(false)
-  const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const authorRef = useRef<HTMLDivElement | null>(null)
+
   useEffect(() => {
     // const scrollHandler = () => {
     //   if (wrapperRef.current!.scrollTop >= authorRef.current!.offsetTop) {
@@ -94,6 +104,7 @@ const Article = () => {
   //     }
   //   }
   // }
+  // H5的写法
   const setPosition = () => {
     if (wrapperRef.current!.scrollTop === 0) {
       const value = commentRef.current!.getBoundingClientRect().top - 60
@@ -102,8 +113,10 @@ const Article = () => {
       wrapperRef.current!.scrollTop = 0
     }
   }
-  // H5的写法
 
+  const showInputHandler = () => {
+    setShowInput(true)
+  }
   //  文章结构
   const renderArticle = () => {
     // 文章详情
@@ -159,7 +172,14 @@ const Article = () => {
           <div className="comment-list" ref={commentRef}>
             {comments.results?.length <= 0 && <NoComment />}
             {comments.results?.map((comment) => (
-              <CommentItem comment={comment} key={comment.com_id} />
+              <CommentItem
+                comment={comment}
+                key={comment.com_id}
+                onShowReply={() => {
+                  setShowReply(true)
+                  setCurrentReplyComment(comment)
+                }}
+              />
             ))}
 
             <InfiniteScroll
@@ -209,8 +229,38 @@ const Article = () => {
         {renderArticle()}
 
         {/* 底部评论栏 */}
-        <CommentFooter article={articleInfo} onSetPosition={setPosition} />
+        <CommentFooter
+          article={articleInfo}
+          onSetPosition={setPosition}
+          onshowInputHandler={showInputHandler}
+        />
       </div>
+      <Popup visible={showInput} bodyStyle={{ height: "100vh" }} destroyOnClose>
+        <CommentInput
+          onClose={() => {
+            setShowInput(false)
+          }}
+          publicComment={(context) => {
+            dispatch(addComment(params.id, context))
+            // dispatch(getCommentPage(params.id, ""))
+            setShowInput(false)
+          }}
+        />
+      </Popup>
+
+      <Popup
+        visible={showReply}
+        bodyStyle={{ width: "100vw" }}
+        destroyOnClose
+        position="right"
+      >
+        <CommentReply
+          comment={currentReplyComment}
+          onClose={() => {
+            setShowReply(false)
+          }}
+        />
+      </Popup>
     </div>
   )
 }

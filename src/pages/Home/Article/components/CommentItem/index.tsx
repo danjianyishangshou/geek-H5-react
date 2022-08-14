@@ -12,6 +12,7 @@ type Props = {
   // reply 回复评论
   type?: "normal" | "reply" | "origin"
   comment: Comment
+  onShowReply?: () => void
 }
 
 const CommentItem = ({
@@ -20,11 +21,12 @@ const CommentItem = ({
   // reply 回复评论
   type = "normal",
   comment = {} as Comment,
+  onShowReply,
 }: Props) => {
   // 回复按钮
   const replyJSX =
     type === "normal" ? (
-      <span className="replay">
+      <span className="replay" onClick={onShowReply}>
         {comment.reply_count} 回复
         <Icon name="iconbtn_right" />
       </span>

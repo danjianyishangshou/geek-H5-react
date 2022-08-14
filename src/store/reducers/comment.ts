@@ -3,6 +3,7 @@ import { RootAction } from "@/types/store"
 
 export type CommentState = {
   comments: CommentRes
+  replyList: CommentRes
 }
 const initState: CommentState = {
   comments: {
@@ -11,6 +12,7 @@ const initState: CommentState = {
     results: [],
     total_count: 0,
   },
+  replyList: {} as CommentRes,
 }
 export const commentReducer = (
   state = initState,
@@ -21,6 +23,11 @@ export const commentReducer = (
       return {
         ...state,
         comments: action.payload,
+      }
+    case "article/set_save_reply":
+      return {
+        ...state,
+        replyList: action.payload,
       }
     default:
       return state

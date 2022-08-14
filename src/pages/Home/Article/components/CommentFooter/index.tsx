@@ -10,17 +10,23 @@ type Props = {
   // reply 回复评论
   type?: "normal" | "reply"
   article: ArticleDetailInfo
-  onSetPosition: () => void
+  onSetPosition?: () => void
+  onshowInputHandler?: () => void
 }
 
-const CommentFooter = ({ type = "normal", article, onSetPosition }: Props) => {
+const CommentFooter = ({
+  type = "normal",
+  article,
+  onSetPosition,
+  onshowInputHandler,
+}: Props) => {
   const dispatch = useDispatch()
   const changePosition = () => {
-    onSetPosition()
+    onSetPosition?.()
   }
   return (
     <div className={styles.root}>
-      <div className="input-btn">
+      <div className="input-btn" onClick={onshowInputHandler}>
         <Icon name="iconbianji" />
         <span>抢沙发</span>
       </div>

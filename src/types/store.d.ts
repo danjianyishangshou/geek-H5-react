@@ -73,6 +73,10 @@ export interface CommentAction {
   type: "article/set_Comments_action"
   payload: CommentRes
 }
+export interface ReplyAction {
+  type: "article/set_save_reply"
+  payload: CommentRes
+}
 // 汇总与action相关的联合类型
 export type RootAction =
   | LoginAction
@@ -88,6 +92,7 @@ export type RootAction =
   | SearchPageAction
   | ArticleInfoAction
   | CommentAction
+  | ReplyAction
 
 // 所有thunkAction的类型
 export type RootThunkAction = ThunkAction<void, RootStore, unknown, RootAction>
