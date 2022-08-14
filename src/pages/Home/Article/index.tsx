@@ -5,12 +5,19 @@ import styles from "./index.module.scss"
 import Icon from "@/components/icon/index"
 import CommentItem from "./components/CommentItem"
 import CommentFooter from "./components/CommentFooter"
-import { useEffect } from "react"
-import { getArticleDetail } from "@/store/actions/article"
+import { useEffect, useRef, useState } from "react"
+import { followUser, getArticleDetail } from "@/store/actions/article"
 import { useDispatch, useSelector } from "react-redux"
-import { RootStore } from "@/types/store"
-import { ArticleDetailInfo } from "@/types/data"
+import { RootAction, RootStore } from "@/types/store"
+import { ArticleDetailInfo, CommentRes } from "@/types/data"
+// 导入处理防止xss攻击的功能包
 import DOMpurify from "dompurify"
+//代码高亮包
+import highlight from "highlight.js"
+// 引入样式 可以选择样式
+import "highlight.js/styles/vs2015.css"
+import { getCommentPage } from "@/store/actions/comment"
+import NoComment from "./components/NoComment"
 const Article = () => {
   const history = useHistory()
   const dispatch = useDispatch()
@@ -24,11 +31,84 @@ const Article = () => {
   const articleInfo = useSelector<RootStore, ArticleDetailInfo>((state) => {
     return state.articles.articleInfo
   })
+  // 处理代码高亮
+  useEffect(() => {
+    // 配置 highlight.js
+    highlight.configure({ ignoreUnescapedHTML: true })
+    // 获取文章内容中所有的 code 标签，并执l行高亮
+    document.querySelectorAll(".dg-html pre ").forEach((el) => {
+      highlight.highlightElement(el as HTMLElement)
+    })
+  }, [articleInfo])
+  const [isTopInfoShow, setTopInfoShow] = useState(false)
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
+  const authorRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    // const scrollHandler = () => {
+    //   if (wrapperRef.current!.scrollTop >= authorRef.current!.offsetTop) {
+    //     setTopInfoShow(true)
+    //   } else {
+    //     setTopInfoShow(false)
+    //   }
+    // }
+    // 顶部吸顶效果
+    const scrollHandler = () => {
+      // getBoundingClientRect H5新增的属性方法
+      const rectInfo = authorRef.current!.getBoundingClientRect()
+      if (rectInfo.top <= 0) {
+        setTopInfoShow(true)
+      } else {
+        setTopInfoShow(false)
+      }
+    }
+    wrapperRef.current?.addEventListener("scroll", scrollHandler)
+    return () => {
+      // eslint-disable-next-line
+      wrapperRef.current?.removeEventListener("scroll", scrollHandler)
+    }
+  }, [])
+  // 获取文章评论信息
+  useEffect(() => {
+    dispatch(getCommentPage(id, ""))
+  }, [dispatch, id])
+  const comments = useSelector<RootStore, CommentRes>((state) => {
+    return state.comment.comments
+  })
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: "article/set_Comments_action",
+        payload: {},
+      } as RootAction)
+    }
+  }, [dispatch, id])
+  const commentRef = useRef<HTMLDivElement | null>(null)
+  // 使用兼容写法
+  // const setPosition = () => {
+  //   const value = commentRef.current?.offsetTop
+  //   if (value) {
+  //     if (wrapperRef.current!.scrollTop === 0) {
+  //       wrapperRef.current!.scrollTop = value + 60
+  //     } else {
+  //       wrapperRef.current!.scrollTop = 0
+  //     }
+  //   }
+  // }
+  const setPosition = () => {
+    if (wrapperRef.current!.scrollTop === 0) {
+      const value = commentRef.current!.getBoundingClientRect().top - 60
+      wrapperRef.current!.scrollTop = value
+    } else {
+      wrapperRef.current!.scrollTop = 0
+    }
+  }
+  // H5的写法
+
   //  文章结构
   const renderArticle = () => {
     // 文章详情
     return (
-      <div className="wrapper">
+      <div className="wrapper" ref={wrapperRef}>
         <div className="article-wrapper">
           <div className="header">
             <h1 className="title">{articleInfo.title}</h1>
@@ -39,13 +119,18 @@ const Article = () => {
               <span>{articleInfo.comm_count}评论</span>
             </div>
 
-            <div className="author">
+            <div className="author" ref={authorRef}>
               <img src={articleInfo.aut_photo} alt="" />
               <span className="name">{articleInfo.aut_name}</span>
               <span
                 className={classNames("follow", {
                   followed: articleInfo.is_followed,
                 })}
+                onClick={() => {
+                  dispatch(
+                    followUser(articleInfo.aut_id, articleInfo.is_followed, id)
+                  )
+                }}
               >
                 {articleInfo.is_followed ? "已关注" : "关注"}
               </span>
@@ -70,11 +155,19 @@ const Article = () => {
             <span>全部评论{articleInfo.comm_count}</span>
             <span>{articleInfo.like_count} 点赞</span>
           </div>
+          {/* 评论列表 */}
+          <div className="comment-list" ref={commentRef}>
+            {comments.results?.length <= 0 && <NoComment />}
+            {comments.results?.map((comment) => (
+              <CommentItem comment={comment} key={comment.com_id} />
+            ))}
 
-          <div className="comment-list">
-            <CommentItem />
-
-            <InfiniteScroll hasMore={false} loadMore={async () => {}} />
+            <InfiniteScroll
+              hasMore={comments.last_id !== comments.end_id}
+              loadMore={async () => {
+                await dispatch(getCommentPage(id, comments.last_id))
+              }}
+            />
           </div>
         </div>
       </div>
@@ -93,12 +186,21 @@ const Article = () => {
             </span>
           }
         >
-          {true && (
+          {isTopInfoShow && (
             <div className="nav-author">
-              <img src="http://geek.itheima.net/images/user_head.jpg" alt="" />
-              <span className="name">黑马先锋</span>
-              <span className={classNames("follow", true ? "followed" : "")}>
-                {true ? "已关注" : "关注"}
+              <img src={articleInfo.aut_photo} alt="" />
+              <span className="name">{articleInfo.aut_name}</span>
+              <span
+                className={classNames("follow", {
+                  followed: articleInfo.is_followed,
+                })}
+                onClick={() => {
+                  dispatch(
+                    followUser(articleInfo.aut_id, articleInfo.is_followed, id)
+                  )
+                }}
+              >
+                {articleInfo.is_followed ? "已关注" : "关注"}
               </span>
             </div>
           )}
@@ -107,7 +209,7 @@ const Article = () => {
         {renderArticle()}
 
         {/* 底部评论栏 */}
-        <CommentFooter />
+        <CommentFooter article={articleInfo} onSetPosition={setPosition} />
       </div>
     </div>
   )

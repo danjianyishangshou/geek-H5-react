@@ -9,6 +9,7 @@ import {
   Profile,
   UserInfo,
   ArticleDetailInfo,
+  CommentRes,
 } from "@/types/data"
 
 // 所有状态的类型
@@ -68,6 +69,10 @@ export interface ArticleInfoAction {
   type: "article/set_article_action"
   payload: ArticleDetailInfo
 }
+export interface CommentAction {
+  type: "article/set_Comments_action"
+  payload: CommentRes
+}
 // 汇总与action相关的联合类型
 export type RootAction =
   | LoginAction
@@ -82,6 +87,7 @@ export type RootAction =
   | SearchKeyWordsAction
   | SearchPageAction
   | ArticleInfoAction
+  | CommentAction
 
 // 所有thunkAction的类型
 export type RootThunkAction = ThunkAction<void, RootStore, unknown, RootAction>

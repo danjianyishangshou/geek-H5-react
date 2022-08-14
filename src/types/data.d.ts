@@ -120,3 +120,23 @@ export type ArticleDetailInfo = {
   read_count: number
   title: string
 }
+//文章评论的分页类型
+export type Comment = {
+  aut_id: string
+  aut_name: string
+  aut_photo: string
+  com_id: string
+  content: string
+  is_followed: boolean
+  is_liking: boolean
+  like_count: number
+  pubdate: string
+  reply_count: number
+}
+//文章评论的类型
+export type CommentRes = {
+  end_id: string
+  last_id: string
+  results: Comment[]
+  total_count: number
+}
